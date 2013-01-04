@@ -1,6 +1,6 @@
 <package>
   <name>openni_camera</name>
-  <version>1.8.6</version>
+  <version>1.8.7</version>
     <description>
     A ROS driver for OpenNI depth (+ RGB) cameras. These include: 
        Microsoft Kinect,
@@ -42,8 +42,7 @@
   <run_depend>libopenni-sensor-primesense-dev</run_depend>
 
   <export>
-    <rviz plugin="${prefix}/openni_nodelets.xml"/>
-    <image_transport plugin="${prefix}/openni_nodelets.xml" />
+    <nodelet plugin="${prefix}/openni_nodelets.xml"/>
   </export>
 
 </package>
