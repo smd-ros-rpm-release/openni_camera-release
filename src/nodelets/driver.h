@@ -88,10 +88,10 @@ namespace openni_camera
 
       // Methods to get calibration parameters for the various cameras
       sensor_msgs::CameraInfoPtr getDefaultCameraInfo(int width, int height, double f) const;
-      sensor_msgs::CameraInfoPtr getRgbCameraInfo(ros::Time time) const;
-      sensor_msgs::CameraInfoPtr getIrCameraInfo(ros::Time time) const;
-      sensor_msgs::CameraInfoPtr getDepthCameraInfo(ros::Time time) const;
-      sensor_msgs::CameraInfoPtr getProjectorCameraInfo(ros::Time time) const;
+      sensor_msgs::CameraInfoPtr getRgbCameraInfo(int width, int height, ros::Time time) const;
+      sensor_msgs::CameraInfoPtr getIrCameraInfo(int width, int height, ros::Time time) const;
+      sensor_msgs::CameraInfoPtr getDepthCameraInfo(int width, int height, ros::Time time) const;
+      sensor_msgs::CameraInfoPtr getProjectorCameraInfo(int width, int height, ros::Time time) const;
 
       // published topics
       image_transport::CameraPublisher pub_rgb_;
@@ -112,6 +112,7 @@ namespace openni_camera
       /** \brief reconfigure server*/
       boost::shared_ptr<ReconfigureServer> reconfigure_server_;
       Config config_;
+      bool config_init_;
 
       /** \brief Camera info manager objects. */
       boost::shared_ptr<camera_info_manager::CameraInfoManager> rgb_info_manager_, ir_info_manager_;
@@ -120,8 +121,10 @@ namespace openni_camera
       double depth_ir_offset_x_;
       double depth_ir_offset_y_;
       int z_offset_mm_;
+      double z_scaling_;
 
-      /// @todo Prefer binning to changing width/height
+      // The desired image dimensions
+      // (might be different from what the driver gives us).
       unsigned image_width_;
       unsigned image_height_;
       unsigned depth_width_;
