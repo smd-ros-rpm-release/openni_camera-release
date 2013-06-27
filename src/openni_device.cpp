@@ -502,11 +502,15 @@ void OpenNIDevice::ImageDataThreadFunction () throw (OpenNIException)
       return;
 
     image_generator_.WaitAndUpdateData ();
+    xn::ImageMetaData image_md;
+    image_generator_.GetMetaData (image_md);
     boost::shared_ptr<xn::ImageMetaData> image_data (new xn::ImageMetaData);
-    image_generator_.GetMetaData (*image_data);
-
+    XnStatus xs = image_data->CopyFrom (image_md);
     image_lock.unlock ();
     
+    if (xs != XN_STATUS_OK)
+       continue;
+
     boost::shared_ptr<Image> image = getCurrentImage (image_data);
     for (map< OpenNIDevice::CallbackHandle, ActualImageCallbackFunction >::iterator callbackIt = image_callback_.begin (); callbackIt != image_callback_.end (); ++callbackIt)
     {
@@ -528,10 +532,15 @@ void OpenNIDevice::DepthDataThreadFunction () throw (OpenNIException)
       return;
 
     depth_generator_.WaitAndUpdateData ();
+    xn::DepthMetaData image_md;
+    depth_generator_.GetMetaData (image_md);
     boost::shared_ptr<xn::DepthMetaData> depth_data (new xn::DepthMetaData);
-    depth_generator_.GetMetaData (*depth_data);
+    XnStatus xs = depth_data->CopyFrom (image_md);
     depth_lock.unlock ();
     
+    if (xs != XN_STATUS_OK)
+       continue;
+
     boost::shared_ptr<DepthImage> depth_image ( new DepthImage (depth_data, baseline_, getDepthFocalLength (), shadow_value_, no_sample_value_) );
 
     for (map< OpenNIDevice::CallbackHandle, ActualDepthImageCallbackFunction >::iterator callbackIt = depth_callback_.begin ();
@@ -555,9 +564,14 @@ void OpenNIDevice::IRDataThreadFunction () throw (OpenNIException)
       return;
 
     ir_generator_.WaitAndUpdateData ();
+    xn::IRMetaData image_md;
+    ir_generator_.GetMetaData (image_md);
     boost::shared_ptr<xn::IRMetaData> ir_data (new xn::IRMetaData);
-    ir_generator_.GetMetaData (*ir_data);
+    XnStatus xs = ir_data->CopyFrom (image_md);
     ir_lock.unlock ();
+
+    if (xs != XN_STATUS_OK)
+       continue;
 
     boost::shared_ptr<IRImage> ir_image ( new IRImage (ir_data) );
 
@@ -639,9 +653,27 @@ bool OpenNIDevice::unregisterIRCallback (const OpenNIDevice::CallbackHandle& cal
   return (ir_callback_.erase (callbackHandle) != 0);
 }
 
-const char* OpenNIDevice::getSerialNumber () const throw ()
+const char* OpenNIDevice::getSerialNumber () throw ()
 {
-  return device_node_info_.GetInstanceName ();
+    const char* openni_serial = device_node_info_.GetInstanceName ();
+    if (strlen(openni_serial)>0 && strcmp(openni_serial, "Device1")) {
+        return openni_serial;
+    } else {
+        char *primesense_serial = (char*)malloc(XN_MAX_NAME_LENGTH); // memleak
+        context_.CreateProductionTree(device_node_info_);
+        xn::Device device;
+
+        if(device_node_info_.GetInstance(device) != XN_STATUS_OK) {
+            THROW_OPENNI_EXCEPTION ("couldn't get device instance for reading serial no.");
+        }
+
+        xn::DeviceIdentificationCapability d = device.GetIdentificationCap();
+
+        d.GetSerialNumber(primesense_serial,XN_MAX_NAME_LENGTH);
+
+        device.Release();
+        return primesense_serial;
+    }
 }
 
 const char* OpenNIDevice::getConnectionString () const throw ()
