@@ -1,3 +1,22 @@
+## openni_camera - 1.9.2-0
+
+User `tfoote@BigFoote` released the packages in the `openni_camera` repository by running `/usr/bin/bloom-release openni_camera --rosdistro hydro --track hydro` on `Fri, 17 Jan 2014 22:11:43 -0000`
+
+The `openni_camera` package was released.
+
+Version of package(s) in repository `openni_camera`:
+- rosdistro version: `1.9.1-0`
+- old version: `1.9.1-0`
+- new version: `1.9.2-0`
+
+Versions of tools used:
+- bloom version: `0.4.4`
+- catkin_pkg version: `0.1.25`
+- rosdep version: `0.10.24`
+- rosdistro version: `0.2.20`
+- vcstools version: `0.1.33`
+
+
 ## openni_camera - 1.9.1-0
 
 User `tfoote@BigFoote` released the packages in the `openni_camera` repository by running `/usr/bin/bloom-release openni_camera --rosdistro hydro --track hydro` on `Fri, 17 Jan 2014 21:30:20 -0000`
