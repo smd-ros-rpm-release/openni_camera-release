@@ -1,3 +1,22 @@
+## openni_camera (indigo) - 1.9.2-1
+
+The packages in the `openni_camera` repository were released into the `indigo` distro by running `/usr/bin/bloom-release openni_camera -r indigo -t indigo` on `Fri, 16 May 2014 20:03:54 -0000`
+
+The `openni_camera` package was released.
+
+Version of package(s) in repository `openni_camera`:
+- rosdistro version: `null`
+- old version: `1.9.2-0`
+- new version: `1.9.2-1`
+
+Versions of tools used:
+- bloom version: `0.5.7`
+- catkin_pkg version: `0.2.2`
+- rosdep version: `0.10.27`
+- rosdistro version: `0.3.5`
+- vcstools version: `0.1.35`
+
+
 ## openni_camera - 1.9.2-0
 
 User `tfoote@BigFoote` released the packages in the `openni_camera` repository by running `/usr/bin/bloom-release openni_camera --rosdistro hydro --track hydro` on `Fri, 17 Jan 2014 22:11:43 -0000`
